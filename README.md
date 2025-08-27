@@ -4,6 +4,8 @@
 
 ChronoGuard Pro is an intelligent B2B SaaS platform that helps healthcare practices and service businesses reduce revenue loss from no-shows through advanced AI predictions and automated schedule optimization.
 
+**🔗 Repository:** https://github.com/zsprydp/chronoguard-pro
+
 ### Key Features
 - 🤖 AI-powered no-show predictions with 85%+ accuracy
 - 📊 Real-time schedule optimization and intelligent overbooking
@@ -31,7 +33,7 @@ ChronoGuard Pro is an intelligent B2B SaaS platform that helps healthcare practi
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-org/chronoguard-pro.git
+git clone https://github.com/zsprydp/chronoguard-pro.git
 cd chronoguard-pro
 ```
 
@@ -50,9 +52,17 @@ python -m alembic upgrade head
 ```
 
 4. Start the services:
+
+**Option 1 - Docker (Recommended):**
 ```bash
-# Backend API
-uvicorn app.main:app --reload --port 8000
+copy .env.example .env
+docker-compose up -d
+```
+
+**Option 2 - Manual Setup:**
+```bash
+# Backend API (port 7000)
+uvicorn app.main:app --reload --port 7000
 
 # Celery worker (in another terminal)
 celery -A app.celery worker --loglevel=info
@@ -61,6 +71,12 @@ celery -A app.celery worker --loglevel=info
 cd ../frontend
 npm install
 npm run dev
+```
+
+**Option 3 - Use Batch Script (Windows):**
+```bash
+# Run the startup script
+start.bat
 ```
 
 ### Project Structure
@@ -76,5 +92,18 @@ chronoguard-pro/
 ### License
 Proprietary - All Rights Reserved
 
+### Access Points
+
+After starting the application:
+
+- **Frontend Dashboard**: http://localhost:7500
+- **Backend API**: http://localhost:7000  
+- **API Documentation**: http://localhost:7000/docs
+- **Health Check**: http://localhost:7000/health
+
+### Repository
+- **GitHub**: https://github.com/zsprydp/chronoguard-pro
+- **Local Path**: C:\Projects\chronoguard-pro
+
 ### Support
-For support, email support@chronoguard.ai
+For support, create an issue on GitHub or email support@chronoguard.ai
