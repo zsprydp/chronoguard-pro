@@ -7,10 +7,12 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Progress } from '@/components/ui/progress'
-import { Calendar, TrendingUp, Users, AlertTriangle, DollarSign, Crown, Clock } from 'lucide-react'
+import { Calendar, TrendingUp, Users, AlertTriangle, DollarSign, Crown, Clock, Plus, Zap } from 'lucide-react'
 import { RevenueChart } from '@/components/charts/RevenueChart'
 import { NoShowTrendChart } from '@/components/charts/NoShowTrendChart'
 import { AppointmentList } from '@/components/appointments/AppointmentList'
+import { DashboardLayout } from '@/components/layout/DashboardLayout'
+import { DashboardFAB } from '@/components/ui/floating-action-button'
 
 interface User {
   id: string
@@ -51,26 +53,19 @@ interface CurrentSubscription {
 
 export default function Dashboard() {
   const router = useRouter()
-  const [user, setUser] = useState<User | null>(null)
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [subscription, setSubscription] = useState<CurrentSubscription | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token')
-    const userData = localStorage.getItem('user')
-    
-    if (!token || !userData) {
-      router.push('/auth/login')
-      return
-    }
+    loadDashboardData()
+  }, [])
 
-    setUser(JSON.parse(userData))
-    loadDashboardData(token)
-  }, [router])
-
-  const loadDashboardData = async (token: string) => {
+  const loadDashboardData = async () => {
     try {
+      const token = localStorage.getItem('access_token')
+      if (!token) return
+
       // Load dashboard stats
       const statsResponse = await fetch('http://localhost:7000/dashboard/stats', {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -95,12 +90,6 @@ export default function Dashboard() {
     }
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('user')
-    router.push('/auth/login')
-  }
-
   const getSubscriptionBadge = (plan: string) => {
     const badges = {
       trial: { label: 'Trial', variant: 'outline' as const, icon: Clock },
@@ -120,41 +109,53 @@ export default function Dashboard() {
     )
   }
 
-  if (loading || !user) {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your dashboard...</p>
+      <DashboardLayout>
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading your dashboard...</p>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     )
   }
 
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
   const trialProgress = subscription?.trial_days_left ? 
     ((14 - subscription.trial_days_left) / 14) * 100 : 0
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">ChronoGuard Pro</h1>
-              <p className="text-gray-600">Welcome back, {user.first_name}!</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              {subscription && getSubscriptionBadge(subscription.current_plan)}
-              <Button variant="outline" onClick={handleLogout}>
-                Sign Out
-              </Button>
+    <DashboardLayout>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+        {/* Header */}
+        <header className="bg-white/80 backdrop-blur-sm shadow-sm border-b border-white/20 lg:ml-0">
+          <div className="max-w-7xl mx-auto px-6 py-6 lg:pl-20">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900 mb-1">
+                  Good morning, {user.first_name}! 👋
+                </h1>
+                <p className="text-gray-600">
+                  Here's what's happening with your practice today
+                </p>
+              </div>
+              <div className="hidden md:flex items-center space-x-3">
+                <Button className="bg-blue-600 hover:bg-blue-700">
+                  <Plus className="h-4 w-4 mr-2" />
+                  New Appointment
+                </Button>
+                <Button variant="outline">
+                  <Zap className="h-4 w-4 mr-2" />
+                  Optimize Schedule
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <div className="max-w-7xl mx-auto p-6">
+        <div className="max-w-7xl mx-auto p-6 lg:pl-20">
         {/* Trial Alert */}
         {user.subscription_status === 'trial' && subscription?.trial_days_left !== undefined && (
           <Alert className="mb-6 border-amber-200 bg-amber-50">
@@ -351,8 +352,12 @@ export default function Dashboard() {
               </CardContent>
             </Card>
           </div>
+          </div>
         </div>
+
+        {/* Floating Action Button */}
+        <DashboardFAB />
       </div>
-    </div>
+    </DashboardLayout>
   )
 }

@@ -16,14 +16,16 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: 'demo@chronoguard.com',
+    password: 'demo123'
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError('')
+
+    console.log('Attempting login with:', formData)
 
     try {
       const response = await fetch('http://localhost:7000/auth/login', {
@@ -34,7 +36,10 @@ export default function LoginPage() {
         body: JSON.stringify(formData)
       })
 
+      console.log('Login response status:', response.status)
+      
       const data = await response.json()
+      console.log('Login response data:', data)
 
       if (!response.ok) {
         throw new Error(data.detail || 'Login failed')
@@ -44,9 +49,12 @@ export default function LoginPage() {
       localStorage.setItem('access_token', data.access_token)
       localStorage.setItem('user', JSON.stringify(data.user))
 
+      console.log('Login successful, redirecting to dashboard')
+      
       // Redirect to dashboard
       router.push('/dashboard')
     } catch (err: any) {
+      console.error('Login error:', err)
       setError(err.message)
     } finally {
       setLoading(false)
@@ -117,6 +125,8 @@ export default function LoginPage() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    title={showPassword ? "Hide password" : "Show password"}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -127,6 +137,28 @@ export default function LoginPage() {
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Sign In
               </Button>
+
+              {/* Quick test buttons */}
+              <div className="flex space-x-2 mt-4">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setFormData({email: 'demo@chronoguard.com', password: 'demo123'})}
+                  className="flex-1"
+                >
+                  Use Demo Account
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setFormData({email: 'test@chronoguard.com', password: 'testpassword123'})}
+                  className="flex-1"
+                >
+                  Use Test Account
+                </Button>
+              </div>
 
               <div className="text-center pt-4">
                 <p className="text-sm text-gray-600">
