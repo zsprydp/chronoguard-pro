@@ -67,14 +67,24 @@ if not exist "frontend\node_modules" (
     cd ..
 )
 
-echo [INFO] Starting backend server (port 7000)...
-start "ChronoGuard Backend" cmd /k "cd /d C:\Projects\chronoguard-pro\backend && venv\Scripts\activate && python -m uvicorn app.main:app --reload --port 7000"
+echo [INFO] Initializing database...
+cd backend
+python init_database.py
+if %errorlevel% neq 0 (
+    echo [ERROR] Database initialization failed!
+    pause
+    exit /b 1
+)
+cd ..
+
+echo [INFO] Starting backend server with database (port 7000)...
+start "ChronoGuard Backend" cmd /k "cd /d C:\Projects\chronoguard-pro\backend && python -m uvicorn app.db_main:app --reload --port 7000"
 
 echo [INFO] Waiting 5 seconds for backend to start...
 timeout /t 5 /nobreak >nul
 
-echo [INFO] Starting frontend server (port 7500)...
-start "ChronoGuard Frontend" cmd /k "cd /d C:\Projects\chronoguard-pro\frontend && npm run dev -- --port 7500"
+echo [INFO] Starting frontend server (port 7501)...
+start "ChronoGuard Frontend" cmd /k "cd /d C:\Projects\chronoguard-pro\frontend && npm run dev -- --port 7501"
 
 echo.
 echo ============================================
@@ -82,15 +92,19 @@ echo  ChronoGuard Pro is starting up!
 echo ============================================
 echo.
 echo Access Points:
-echo  Frontend Dashboard: http://localhost:7500
+echo  Frontend Dashboard: http://localhost:7501
 echo  Backend API:        http://localhost:7000
 echo  API Documentation:  http://localhost:7000/docs
+echo.
+echo Demo Login Credentials:
+echo  Email: demo@chronoguard.com
+echo  Password: demo123
 echo.
 echo Both servers are starting in separate command windows.
 echo Wait 30-60 seconds for all services to be ready.
 echo.
-echo NOTE: Database features require PostgreSQL and Redis
-echo For full functionality, install and start these services.
+echo Database: SQLite (ready to use, no setup required)
+echo Full database integration with real data persistence.
 echo.
 echo To stop: Close the command windows or run stop.bat
 echo.

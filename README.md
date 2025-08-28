@@ -1,82 +1,72 @@
 # ChronoGuard Pro
 
-## AI-Powered Appointment Optimization Platform
+## AI-Powered Appointment Optimization SaaS Platform
 
 ChronoGuard Pro is an intelligent B2B SaaS platform that helps healthcare practices and service businesses reduce revenue loss from no-shows through advanced AI predictions and automated schedule optimization.
 
 **🔗 Repository:** https://github.com/zsprydp/chronoguard-pro
 
-### Key Features
-- 🤖 AI-powered no-show predictions with 85%+ accuracy
-- 📊 Real-time schedule optimization and intelligent overbooking
-- 💰 Revenue impact tracking and analytics
-- 📱 Patient communication and automated reminders
-- 🔄 Seamless calendar and EHR integrations
-- 📈 Advanced analytics and industry benchmarking
+### ✨ Key Features
+- 🤖 AI-powered no-show predictions with risk assessment
+- 📊 Real-time schedule optimization and intelligent recommendations  
+- 💰 Revenue impact tracking and analytics dashboard
+- 📱 Modern responsive UI with intuitive design
+- 🔐 Multi-tenant SaaS architecture with subscription management
+- 🗄️ Complete database integration with real data persistence
+- 📈 Interactive appointment management with color-coded risk levels
 
-### Tech Stack
-- **Backend**: Python (FastAPI, SQLAlchemy, Celery)
-- **ML/AI**: scikit-learn, TensorFlow, pandas
-- **Database**: PostgreSQL, Redis
-- **Frontend**: React with TypeScript, Tailwind CSS
-- **Infrastructure**: Docker, Kubernetes, AWS/GCP
+### 🛠️ Tech Stack
+- **Backend**: Python (FastAPI, SQLAlchemy, Alembic)
+- **Database**: SQLite (development) / PostgreSQL (production)
+- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
+- **UI Components**: Custom design system with accessibility features
+- **Authentication**: JWT tokens with secure password hashing
+- **Development**: Hot reload, automated testing, comprehensive documentation
 
-### Quick Start
+## 🚀 Quick Start
 
-#### Prerequisites
-- Python 3.10+
-- Node.js 18+
-- PostgreSQL 14+
-- Redis 6+
+### Prerequisites
+- **Python 3.10+** (for backend API)
+- **Node.js 18+** (for frontend)
+- **Git** (for cloning repository)
 
-#### Installation
+*No database setup required - uses SQLite out of the box!*
 
-1. Clone the repository:
+### ⚡ One-Click Startup (Windows)
+
+1. **Clone the repository:**
 ```bash
 git clone https://github.com/zsprydp/chronoguard-pro.git
 cd chronoguard-pro
 ```
 
-2. Set up the backend:
+2. **Run the startup script:**
+```bash
+start.bat
+```
+
+That's it! The script will:
+- ✅ Check prerequisites  
+- ✅ Install dependencies
+- ✅ Initialize the SQLite database
+- ✅ Start both backend and frontend servers
+- ✅ Open in separate windows so you can close the main terminal
+
+### 🔧 Manual Setup (Alternative)
+
+**Backend Setup:**
 ```bash
 cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
+python init_database.py
+python -m uvicorn app.db_main:app --reload --port 7000
 ```
 
-3. Set up the database:
+**Frontend Setup (in another terminal):**
 ```bash
-createdb chronoguard_db
-python -m alembic upgrade head
-```
-
-4. Start the services:
-
-**Option 1 - Docker (Recommended):**
-```bash
-copy .env.example .env
-docker-compose up -d
-```
-
-**Option 2 - Manual Setup:**
-```bash
-# Backend API (port 7000)
-uvicorn app.main:app --reload --port 7000
-
-# Celery worker (in another terminal)
-celery -A app.celery worker --loglevel=info
-
-# Frontend (in another terminal)
-cd ../frontend
+cd frontend
 npm install
-npm run dev
-```
-
-**Option 3 - Use Batch Script (Windows):**
-```bash
-# Run the startup script
-start.bat
+npm run dev -- --port 7501
 ```
 
 ### Project Structure
@@ -92,14 +82,63 @@ chronoguard-pro/
 ### License
 Proprietary - All Rights Reserved
 
-### Access Points
+## 📍 Access Points
 
 After starting the application:
 
-- **Frontend Dashboard**: http://localhost:7500
-- **Backend API**: http://localhost:7000  
-- **API Documentation**: http://localhost:7000/docs
-- **Health Check**: http://localhost:7000/health
+- **🌐 Frontend Dashboard**: http://localhost:7501
+- **🔗 Backend API**: http://localhost:7000  
+- **📚 API Documentation**: http://localhost:7000/docs
+- **❤️ Health Check**: http://localhost:7000/health
+
+### 🔑 Demo Login Credentials
+- **Email**: `demo@chronoguard.com`
+- **Password**: `demo123`
+
+*Or create a new account via the registration page*
+
+## 🛑 Stopping the Application
+
+### Using the Stop Script:
+```bash
+stop.bat
+```
+
+### Manual Stop:
+- Close the backend and frontend command windows
+- Or use Ctrl+C in each terminal
+
+The applications will continue running independently in their own windows until explicitly stopped, allowing you to close the main terminal while keeping the servers running.
+
+## 📂 Project Structure
+```
+chronoguard-pro/
+├── backend/              # Python FastAPI backend
+│   ├── app/             # Application code
+│   ├── alembic/         # Database migrations  
+│   ├── chronoguard.db   # SQLite database
+│   └── *.py             # Database scripts & tests
+├── frontend/            # Next.js React frontend
+│   └── src/             # Frontend source code
+├── start.bat           # Windows startup script
+├── stop.bat            # Windows stop script  
+└── README.md           # This file
+```
+
+## 🧪 Testing
+
+Run the comprehensive test suite:
+```bash
+cd backend
+python test_database.py
+```
+
+Or test specific endpoints:
+```bash
+python simple_test.py
+```
+
+See `backend/TESTING.md` for detailed testing instructions.
 
 ### Repository
 - **GitHub**: https://github.com/zsprydp/chronoguard-pro
