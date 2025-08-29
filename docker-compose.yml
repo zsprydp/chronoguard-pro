@@ -1,3 +1,4 @@
+version: '3.8'
 
 services:
   # PostgreSQL Database
@@ -9,7 +10,7 @@ services:
       POSTGRES_PASSWORD: chronoguard_password
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./packages/backend/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
     healthcheck:
@@ -36,7 +37,7 @@ services:
   backend:
     build:
       context: .
-      target: backend
+      dockerfile: packages/backend/Dockerfile
     environment:
       DATABASE_URL: postgresql://chronoguard_user:chronoguard_password@db:5432/chronoguard_db
       REDIS_URL: redis://redis:6379
@@ -51,7 +52,7 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./ml/models:/app/ml/models
+      - ./packages/ml/models:/app/ml/models
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
@@ -62,7 +63,7 @@ services:
   celery-worker:
     build:
       context: .
-      target: backend
+      dockerfile: packages/backend/Dockerfile
     command: celery -A app.celery worker --loglevel=info
     environment:
       DATABASE_URL: postgresql://chronoguard_user:chronoguard_password@db:5432/chronoguard_db
@@ -74,13 +75,13 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./ml/models:/app/ml/models
+      - ./packages/ml/models:/app/ml/models
 
   # Celery Beat Scheduler
   celery-beat:
     build:
       context: .
-      target: backend
+      dockerfile: packages/backend/Dockerfile
     command: celery -A app.celery beat --loglevel=info
     environment:
       DATABASE_URL: postgresql://chronoguard_user:chronoguard_password@db:5432/chronoguard_db
@@ -92,13 +93,13 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./ml/models:/app/ml/models
+      - ./packages/ml/models:/app/ml/models
 
   # Frontend
   frontend:
     build:
       context: .
-      target: frontend
+      dockerfile: packages/frontend/Dockerfile
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:7000/api/v1
     ports:

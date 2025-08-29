@@ -1,0 +1,59 @@
+{
+  "name": "chronoguard-pro-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ChronoGuard Pro - AI-Powered Appointment Optimization SaaS Platform",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd packages/backend && python -m uvicorn app.db_main:app --reload --port 7000",
+    "dev:frontend": "cd packages/frontend && npm run dev -- --port 7501",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd packages/frontend && npm run build",
+    "build:backend": "cd packages/backend && echo 'Backend build completed'",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "cd packages/backend && python -m uvicorn app.db_main:app --port 7000",
+    "start:frontend": "cd packages/frontend && npm run start",
+    "install:all": "npm install && cd packages/frontend && npm install && cd ../backend && pip install -r requirements.txt",
+    "test": "npm run test:frontend && npm run test:backend",
+    "test:frontend": "cd packages/frontend && npm run test",
+    "test:backend": "cd packages/backend && python -m pytest",
+    "lint": "npm run lint:frontend && npm run lint:backend",
+    "lint:frontend": "cd packages/frontend && npm run lint",
+    "lint:backend": "cd packages/backend && flake8 .",
+    "format": "npm run format:frontend && npm run format:backend",
+    "format:frontend": "cd packages/frontend && npm run format",
+    "format:backend": "cd packages/backend && black .",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:build": "docker-compose build",
+    "db:init": "cd packages/backend && python init_database.py",
+    "db:migrate": "cd packages/backend && alembic upgrade head",
+    "db:reset": "cd packages/backend && python init_database.py"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zsprydp/chronoguard-pro.git"
+  },
+  "keywords": [
+    "saas",
+    "healthcare",
+    "appointment-optimization",
+    "ai",
+    "machine-learning",
+    "fastapi",
+    "nextjs",
+    "monorepo"
+  ],
+  "author": "ChronoGuard Pro Team",
+  "license": "Proprietary"
+}

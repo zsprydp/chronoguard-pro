@@ -9,8 +9,8 @@ python-dotenv==1.0.0
 # Database
 sqlalchemy==2.0.23
 alembic==1.12.1
-psycopg2-binary==2.9.9
-redis==5.0.1
+# psycopg2-binary==2.9.9  # Only needed for PostgreSQL production
+# redis==5.0.1  # Only needed for production caching
 
 # ML/AI Dependencies
 scikit-learn==1.3.2

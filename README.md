@@ -1,4 +1,4 @@
-# ChronoGuard Pro
+# ChronoGuard Pro - Monorepo
 
 ## AI-Powered Appointment Optimization SaaS Platform
 
@@ -23,6 +23,21 @@ ChronoGuard Pro is an intelligent B2B SaaS platform that helps healthcare practi
 - **Authentication**: JWT tokens with secure password hashing
 - **Development**: Hot reload, automated testing, comprehensive documentation
 
+## 🏗️ Monorepo Structure
+
+```
+chronoguard-pro/
+├── packages/
+│   ├── backend/          # Python FastAPI backend
+│   ├── frontend/         # Next.js React frontend
+│   ├── ml/              # Machine learning models and pipelines
+│   └── shared/          # Shared utilities and types
+├── scripts/             # Development and deployment scripts
+├── docker-compose.yml   # Multi-service Docker setup
+├── package.json         # Root package.json with workspace config
+└── README.md           # This file
+```
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -42,7 +57,7 @@ cd chronoguard-pro
 
 2. **Run the startup script:**
 ```bash
-start.bat
+scripts\dev.bat
 ```
 
 That's it! The script will:
@@ -54,33 +69,36 @@ That's it! The script will:
 
 ### 🔧 Manual Setup (Alternative)
 
-**Backend Setup:**
+**Install all dependencies:**
 ```bash
-cd backend
-pip install -r requirements.txt
-python init_database.py
-python -m uvicorn app.db_main:app --reload --port 7000
+npm run install:all
 ```
 
-**Frontend Setup (in another terminal):**
+**Start development servers:**
 ```bash
-cd frontend
-npm install
-npm run dev -- --port 7501
+npm run dev
 ```
 
-### Project Structure
-```
-chronoguard-pro/
-├── backend/           # Python FastAPI backend
-├── frontend/          # React TypeScript frontend
-├── ml/               # Machine learning models and pipelines
-├── docs/             # Documentation
-└── tests/            # Test suites
+**Or start individually:**
+```bash
+# Backend (Terminal 1)
+npm run dev:backend
+
+# Frontend (Terminal 2)  
+npm run dev:frontend
 ```
 
-### License
-Proprietary - All Rights Reserved
+### 🐳 Docker Setup
+
+**Start all services with Docker:**
+```bash
+npm run docker:up
+```
+
+**Stop all services:**
+```bash
+npm run docker:down
+```
 
 ## 📍 Access Points
 
@@ -101,48 +119,88 @@ After starting the application:
 
 ### Using the Stop Script:
 ```bash
-stop.bat
+scripts\stop.bat
 ```
 
 ### Manual Stop:
 - Close the backend and frontend command windows
 - Or use Ctrl+C in each terminal
 
-The applications will continue running independently in their own windows until explicitly stopped, allowing you to close the main terminal while keeping the servers running.
+## 📦 Package Management
 
-## 📂 Project Structure
-```
-chronoguard-pro/
-├── backend/              # Python FastAPI backend
-│   ├── app/             # Application code
-│   ├── alembic/         # Database migrations  
-│   ├── chronoguard.db   # SQLite database
-│   └── *.py             # Database scripts & tests
-├── frontend/            # Next.js React frontend
-│   └── src/             # Frontend source code
-├── start.bat           # Windows startup script
-├── stop.bat            # Windows stop script  
-└── README.md           # This file
+This monorepo uses npm workspaces for package management:
+
+```bash
+# Install dependencies for all packages
+npm install
+
+# Install dependencies for a specific package
+cd packages/frontend && npm install
+
+# Run scripts across all packages
+npm run dev          # Start all services
+npm run build        # Build all packages
+npm run test         # Test all packages
+npm run lint         # Lint all packages
 ```
 
 ## 🧪 Testing
 
-Run the comprehensive test suite:
 ```bash
-cd backend
-python test_database.py
+# Test all packages
+npm run test
+
+# Test specific package
+npm run test:frontend
+npm run test:backend
 ```
 
-Or test specific endpoints:
+## 🚀 Deployment
+
 ```bash
-python simple_test.py
+# Build for production
+npm run build
+
+# Start production servers
+npm run start
+
+# Deploy with Docker
+npm run docker:build
+npm run docker:up
 ```
 
-See `backend/TESTING.md` for detailed testing instructions.
+## 🔧 Development
 
-### Repository
-- **GitHub**: https://github.com/zsprydp/chronoguard-pro
-- **Local Path**: C:\Projects\chronoguard-pro
+### Adding New Packages
 
-### Support
-For support, create an issue on GitHub or email support@chronoguard.ai
+1. Create new directory in `packages/`
+2. Add `package.json` with appropriate name (`@chronoguard/package-name`)
+3. Update root `package.json` scripts if needed
+
+### Database Management
+
+```bash
+# Initialize database
+npm run db:init
+
+# Run migrations
+npm run db:migrate
+
+# Reset database
+npm run db:reset
+```
+
+## 📝 License
+Proprietary - All Rights Reserved
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📞 Support
+
+For support and questions, please contact the development team.

@@ -1,5 +1,5 @@
 {
-  "name": "chronoguard-pro-frontend",
+  "name": "@chronoguard/frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {

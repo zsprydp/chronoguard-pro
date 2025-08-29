@@ -1,0 +1,19 @@
+{
+  "name": "@chronoguard/shared",
+  "version": "1.0.0",
+  "description": "Shared utilities and types for ChronoGuard Pro",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest"
+  },
+  "keywords": [
+    "shared",
+    "utilities",
+    "types"
+  ],
+  "author": "ChronoGuard Pro Team",
+  "license": "Proprietary"
+}

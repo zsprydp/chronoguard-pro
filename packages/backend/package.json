@@ -1,0 +1,24 @@
+{
+  "name": "@chronoguard/backend",
+  "version": "1.0.0",
+  "description": "ChronoGuard Pro Backend API",
+  "main": "app/main.py",
+  "scripts": {
+    "dev": "python -m uvicorn app.db_main:app --reload --port 7000",
+    "start": "python -m uvicorn app.db_main:app --port 7000",
+    "test": "python -m pytest",
+    "lint": "flake8 .",
+    "format": "black .",
+    "db:init": "python init_database.py",
+    "db:migrate": "alembic upgrade head",
+    "db:reset": "python init_database.py"
+  },
+  "keywords": [
+    "fastapi",
+    "python",
+    "api",
+    "backend"
+  ],
+  "author": "ChronoGuard Pro Team",
+  "license": "Proprietary"
+}

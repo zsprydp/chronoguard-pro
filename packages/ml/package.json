@@ -1,0 +1,20 @@
+{
+  "name": "@chronoguard/ml",
+  "version": "1.0.0",
+  "description": "Machine Learning models and pipelines for ChronoGuard Pro",
+  "main": "index.py",
+  "scripts": {
+    "train": "python train_models.py",
+    "predict": "python predictor.py",
+    "optimize": "python optimizer.py",
+    "test": "python -m pytest"
+  },
+  "keywords": [
+    "machine-learning",
+    "ai",
+    "prediction",
+    "optimization"
+  ],
+  "author": "ChronoGuard Pro Team",
+  "license": "Proprietary"
+}
